@@ -143,15 +143,6 @@ definitions:
   Rides:
     type: "object"
     properties:
-      {
-        "start_long": 100,
-        "start_lat": 70,
-        "end_long": 110,
-        "end_lat": 75,
-        "rider_name": "Max",
-        "driver_name": "John",
-        "driver_vehicle": "Car"
-      }
       start_long:
         type: "integer"
         format: "int64"
