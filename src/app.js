@@ -69,7 +69,7 @@ module.exports = (db) => {
       req.body.end_lat, req.body.end_long, req.body.rider_name,
       req.body.driver_name, req.body.driver_vehicle];
 
-    const result = db.run('INSERT INTO Rides(startLat, startLong,' +
+    db.run('INSERT INTO Rides(startLat, startLong,' +
         'endLat, endLong, riderName, driverName, driverVehicle) VALUES' +
         '(?, ?, ?, ?, ?, ?, ?)', values, function(err) {
       if (err) {
@@ -79,9 +79,9 @@ module.exports = (db) => {
           message: 'Unknown error',
         });
       }
-
-      db.all('SELECT * FROM Rides WHERE' +
-          'rideID = ?', result.id, function(err, rows) {
+      db.all('SELECT * FROM Rides WHERE ' +
+          // eslint-disable-next-line no-invalid-this
+          'rideID = ?', this.lastID, function(err, rows) {
         if (err) {
           logger.error(err);
           return res.send({
@@ -90,7 +90,7 @@ module.exports = (db) => {
           });
         }
 
-        res.send(rows);
+        res.send(rows[0]);
       });
     });
   });
@@ -138,7 +138,7 @@ module.exports = (db) => {
         });
       }
 
-      res.send(rows);
+      res.send(rows[0]);
     });
   });
 
