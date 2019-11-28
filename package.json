@@ -7,8 +7,21 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
-    "start": "node index.js"
+    "test": "npm run lint && nyc mocha tests",
+    "start": "node index.js",
+    "lint": "eslint ./src --fix",
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run test"
+    }
+  },
+  "nyc": {
+    "check-coverage": true,
+    "branches": 80,
+    "lines": 80,
+    "functions": 80,
+    "statements": 80
   },
   "keywords": [
     "Xendit"
@@ -21,7 +34,15 @@
     "sqlite3": "^4.0.6"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
+    "eslint": "^6.7.1",
+    "eslint-config-google": "^0.14.0",
+    "husky": "^3.1.0",
     "mocha": "^6.1.4",
-    "supertest": "^4.0.2"
+    "nyc": "^14.1.1",
+    "supertest": "^4.0.2",
+    "typescript": "^3.7.2",
+    "winston": "^3.2.1"
   }
 }
