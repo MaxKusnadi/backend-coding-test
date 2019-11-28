@@ -2,7 +2,9 @@
 *Please describe your changes*
 
 ## Checklist
-- [ ] Proper PR title
-- [ ] Proper PR Description
-- [ ] Added UT/FT for the change
-- [ ] Have reviewer for the change
+- [ ] I have proper PR title
+- [ ] I have proper PR Description
+- [ ] I have added UT for the change
+- [ ] I have reviewer for the change
+- [ ] I have >80% coverage and post the result here
+- [ ] I have added documentation for my changes

@@ -9,7 +9,8 @@
   "scripts": {
     "test": "npm run lint && nyc mocha tests",
     "start": "node index.js",
-    "lint": "eslint ./src ./tests --fix"
+    "lint": "eslint ./src ./tests --fix",
+    "tsc": "tsc"
   },
   "husky": {
     "hooks": {
