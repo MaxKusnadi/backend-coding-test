@@ -1,0 +1,179 @@
+swagger: "2.0"
+info:
+  description: "This is the developer documentation for Rides Data Service. This service enables the storing and viewing of rides data"
+  version: "1.0.0"
+  title: "Rides Data Service"
+host: "localhost:8081"
+tags:
+- name: "rides"
+  description: "Storing and Retrieving of rides data"
+- name: "health"
+  description: "Check the availability of Rides Data Service"
+schemes:
+- "http"
+paths:
+  /health:
+    get:
+      tags:
+      - "health"
+      summary: "Simple call to check the availability of Rides Data Service"
+      responses:
+        200:
+          description: "Successful call"
+  /rides:
+    get:
+      tags:
+        - "rides"
+      summary: "Find all rides in the database"
+      operationId: "getAllRides"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Rides"
+        404:
+          description: "Rides not found"
+        500:
+          description: "Server error"
+    post:
+      tags:
+        - "rides"
+      summary: "Create a new ride data in the database"
+      description: ""
+      operationId: "createNewRide"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - {
+          "start_long": 100,
+          "start_lat": 70,
+          "end_long": 110,
+          "end_lat": 75,
+          "rider_name": "Max",
+          "driver_name": "John",
+          "driver_vehicle": "Car"
+        }
+        - name: "start_long"
+          in: "body"
+          description: "The longitude of the initial location of the ride. The value must be in between -180 and 180 exclusive"
+          required: true
+          type: "integer"
+          format: "int64"
+
+        - name: "start_lat"
+          in: "body"
+          description: "The latitude of the initial location of the ride. The value must be in between -90 and 90 exclusive"
+          required: true
+          type: "integer"
+          format: "int64"
+
+        - name: "end_long"
+          in: "body"
+          description: "The longitude of the end location of the ride. The value must be in between -180 and 180 exclusive"
+          required: true
+          type: "integer"
+          format: "int64"
+
+        - name: "end_lat"
+          in: "body"
+          description: "The latitude of the end location of the ride. The value must be in between -90 and 90 exclusive"
+          required: true
+          type: "integer"
+          format: "int64"
+
+        - name: "rider_name"
+          in: "body"
+          description: "The name of the rider"
+          required: true
+          type: "string"
+
+        - name: "driver_name"
+          in: "body"
+          description: "The name of the driver"
+          required: true
+          type: "string"
+
+        - name: "driver_vehicle"
+          in: "body"
+          description: "The plate number of the driver"
+          required: true
+          type: "string"
+
+      responses:
+        201:
+          description: "Rides creation is successful"
+        200:
+          description: "Rides is already created"
+        400:
+          description: "Bad request"
+        500:
+          description: "Server error"
+
+  /rides/{rideId}:
+    get:
+      tags:
+      - "rides"
+      summary: "Find ride by ID"
+      description: "Returns a single ride"
+      operationId: "getRideById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "rideId"
+        in: "path"
+        description: "ID of ride to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Rides"
+        404:
+          description: "Rides not found"
+        500:
+          description: "Server error"
+
+definitions:
+  Rides:
+    type: "object"
+    properties:
+      {
+        "start_long": 100,
+        "start_lat": 70,
+        "end_long": 110,
+        "end_lat": 75,
+        "rider_name": "Max",
+        "driver_name": "John",
+        "driver_vehicle": "Car"
+      }
+      start_long:
+        type: "integer"
+        format: "int64"
+        description: "The initial longitude of the ride"
+      start_lat:
+        type: "integer"
+        format: "int64"
+        description: "The initial latitude of the ride"
+      end_long:
+        type: "integer"
+        format: "int64"
+        description: "The final longitude of the ride"
+      end_lat:
+        type: "integer"
+        format: "int64"
+        description: "The final latitude of the ride"
+      rider_name:
+        type: "string"
+        description: "The name of the rider"
+      driver_name:
+        type: "string"
+        description: "The name of the rider"
+      driver_vehicle:
+        type: "string"
+        description: "The name of the rider"
