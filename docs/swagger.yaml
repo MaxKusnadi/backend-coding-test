@@ -3,7 +3,7 @@ info:
   description: "This is the developer documentation for Rides Data Service. This service enables the storing and viewing of rides data"
   version: "1.0.0"
   title: "Rides Data Service"
-host: "localhost:8081"
+host: "localhost:8010"
 tags:
 - name: "rides"
   description: "Storing and Retrieving of rides data"
