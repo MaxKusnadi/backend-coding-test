@@ -2,12 +2,42 @@
 
 const request = require('supertest');
 const assert = require('assert');
+const _ = require('lodash');
 
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 
 const app = require('../src/app')(db);
 const buildSchemas = require('../src/schemas');
+
+const prepareData = async function() {
+  const data = {
+    'start_long': 100,
+    'start_lat': 70,
+    'end_long': 110,
+    'end_lat': 75,
+    'rider_name': 'Max',
+    'driver_name': 'John',
+    'driver_vehicle': 'Car',
+  };
+  const values = [data.start_lat, data.start_long,
+    data.end_lat, data.end_long, data.rider_name,
+    data.driver_name, data.driver_vehicle];
+  _.times(15, () => {
+    db.run('INSERT INTO Rides(startLat, startLong,' +
+            'endLat, endLong, riderName, driverName, driverVehicle) VALUES' +
+            '(?, ?, ?, ?, ?, ?, ?)', values, function(err) {
+      if (err) {
+        logger.error(err);
+        return res.send({
+          error_code: 'SERVER_ERROR',
+          message: 'Unknown error',
+        });
+      }
+    });
+  });
+};
+
 
 describe('API tests', () => {
   before((done) => {
@@ -42,16 +72,6 @@ describe('API tests', () => {
           .end(done);
     });
 
-    it('should return server error', (done) => {
-      request(app)
-          .get('/rides')
-          .expect(200)
-          .expect((res) => {
-            assert(res.body.error_code === 'RIDES_NOT_FOUND_ERROR');
-          })
-          .end(done);
-    });
-
     it('should return fine', (done) => {
       request(app)
           .post('/rides')
@@ -71,10 +91,86 @@ describe('API tests', () => {
                 .get(`/rides`)
                 .expect(200)
                 .expect((getResponse) => {
-                  assert(getResponse.body[0].rideID === res.body.rideID);
+                  assert(getResponse.body.data[0].rideID === res.body.rideID);
                 })
                 .end(done);
           });
+    });
+  });
+
+  describe('GET /rides pagination', () => {
+    it('should fail with invalid page and size', (done) => {
+      request(app)
+          .get('/rides')
+          .query({
+            'page': 'abc',
+            'size': 'abc',
+          })
+          .expect(200)
+          .expect((res) => {
+            assert(res.body.error_code === 'VALIDATION_ERROR');
+          })
+          .end(done);
+    });
+
+    it('should fail with negative page and size', (done) => {
+      request(app)
+          .get('/rides')
+          .query({
+            'page': 0,
+            'size': -1,
+          })
+          .expect(200)
+          .expect((res) => {
+            assert(res.body.error_code === 'VALIDATION_ERROR');
+          })
+          .end(done);
+    });
+
+    it('should use default value if not given', (done) => {
+      prepareData();
+      request(app)
+          .get('/rides')
+          .expect(200)
+          .expect((res) => {
+            assert(res.body.page === 1);
+            assert(res.body.size === 10);
+            assert(res.body.data.length <= res.body.size);
+          })
+          .end(done);
+    });
+
+    it('should use default total page ' +
+        'value if page number is bigger', (done) => {
+      prepareData();
+      request(app)
+          .get('/rides')
+          .expect(200)
+          .query({
+            'page': 99,
+          })
+          .expect((res) => {
+            assert(res.body.page === res.body.totalPages);
+            assert(res.body.size === 10);
+            assert(res.body.data.length <= res.body.size);
+          })
+          .end(done);
+    });
+
+    it('should test large size', (done) => {
+      prepareData();
+      request(app)
+          .get('/rides')
+          .expect(200)
+          .query({
+            'size': 200,
+            'page': 1,
+          })
+          .expect((res) => {
+            assert(res.body.page === res.body.totalPages);
+            assert(res.body.size === res.body.data.length);
+          })
+          .end(done);
     });
   });
 
@@ -233,4 +329,3 @@ describe('API tests', () => {
     });
   });
 });
-
