@@ -28,11 +28,26 @@ paths:
       operationId: "getAllRides"
       produces:
         - "application/json"
+      parameter:
+        - name: "page"
+          in: "path"
+          description: "The input page of the rides data. It must be > 0. This will default to 1 if not given"
+          required: false
+          type: "integer"
+          format: "int64"
+
+        - name: "size"
+          in: "path"
+          description: "Number of rides data per page of the rides data. It must be > 0. This will default to 10 if not given"
+          required: false
+          type: "integer"
+          format: "int64"
+
       responses:
         200:
           description: "Successful operation"
           schema:
-            $ref: "#/definitions/Rides"
+            $ref: "#/definitions/GetRidesResponse"
         404:
           description: "Rides not found"
         500:
@@ -48,15 +63,6 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - {
-          "start_long": 100,
-          "start_lat": 70,
-          "end_long": 110,
-          "end_lat": 75,
-          "rider_name": "Max",
-          "driver_name": "John",
-          "driver_vehicle": "Car"
-        }
         - name: "start_long"
           in: "body"
           description: "The longitude of the initial location of the ride. The value must be in between -180 and 180 exclusive"
@@ -168,3 +174,27 @@ definitions:
       driver_vehicle:
         type: "string"
         description: "The name of the rider"
+  GetRidesResponse:
+    type: "object"
+      data: data.slice(startIndex, endIndex),
+    properties:
+      totalItems:
+        type: "integer"
+        format: "int64"
+        description: "Total number of rides in the database"
+      totalPages:
+        type: "integer"
+        format: "int64"
+        description: "Total number of pages with the given query"
+      page:
+        type: "integer"
+        format: "int64"
+        description: "Total current page of the data"
+      size:
+        type: "integer"
+        format: "int64"
+        description: "Maximum number of rides per page"
+      data:
+        schema:
+          $ref: "#/definitions/Rides"
+        description: "Array of rides data"

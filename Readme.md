@@ -28,8 +28,8 @@ Please deliver documentation of the server that clearly explains the goals of th
 
 #### Success Criteria
 
-1. A pull request against `master` of your fork with a clear description of the change and purpose and merge it
-3. **[BONUS]** Create an easy way to deploy and view the documentation in a web format and include instructions to do so
+1. **[DONE]** A pull request against `master` of your fork with a clear description of the change and purpose and merge it
+3. **[DONE]** **[BONUS]** Create an easy way to deploy and view the documentation in a web format and include instructions to do so
 
 ### Implement Tooling
 
@@ -42,26 +42,26 @@ Please implement the following tooling:
 
 #### Success Criteria
 
-1. Create a pull request against `master` of your fork with the new tooling and merge it
+1. **[DONE]** Create a pull request against `master` of your fork with the new tooling and merge it
     1. `eslint` should have an opinionated format
     2. `nyc` should aim for test coverage of `80%` across lines, statements, and branches
     3. `pre-push` should run the tests before allowing pushing using `git`
     4. `winston` should be used to replace console logs and all errors should be logged as well. Logs should go to disk.
-2. Ensure that tooling is connected to `npm test`
-3. Create a separate pull request against `master` of your fork with the linter fixes and merge it
-4. Create a separate pull request against `master` of your fork to increase code coverage to acceptable thresholds and merge it
-5. **[BONUS]** Add integration to CI such as Travis or Circle
-6. **[BONUS]** Add Typescript support
+2. **[DONE]** Ensure that tooling is connected to `npm test`
+3. **[DONE]** Create a separate pull request against `master` of your fork with the linter fixes and merge it
+4. **[DONE]** Create a separate pull request against `master` of your fork to increase code coverage to acceptable thresholds and merge it
+5. **[DONE]** **[BONUS]** Add integration to CI such as Travis or Circle
+6. **[DONE]** **[BONUS]** Add Typescript support
 
 ### Implement Pagination
 
 Please implement pagination to retrieve pages of the resource `rides`.
 
-1. Create a pull request against `master` with your changes to the `GET /rides` endpoint to support pagination including:
+1. **[DONE]** Create a pull request against `master` with your changes to the `GET /rides` endpoint to support pagination including:
     1. Code changes
     2. Tests
     3. Documentation
-2. Merge the pull request
+2. **[DONE]** Merge the pull request
 
 ### Refactoring
 

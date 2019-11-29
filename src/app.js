@@ -96,6 +96,19 @@ module.exports = (db) => {
   });
 
   app.get('/rides', (req, res) => {
+    const pageNo = req.query.page;
+    const size = req.query.size;
+
+    if (pageNo && size &&
+        ((!Number.isInteger(Number(pageNo)) ||
+            !Number.isInteger(Number(size))) ||
+        (Number(pageNo) <= 0 || Number(size) <=0))) {
+      logger.error('Validation error');
+      return res.send({
+        error_code: 'VALIDATION_ERROR',
+        message: 'page and size must be integer > 0',
+      });
+    }
     logger.info('[GET] /rides is hit');
     db.all('SELECT * FROM Rides', function(err, rows) {
       if (err) {
@@ -113,8 +126,8 @@ module.exports = (db) => {
           message: 'Could not find any rides',
         });
       }
-
-      res.send(rows);
+      const resp = paginate(rows, pageNo, size);
+      res.send(resp);
     });
   });
 
@@ -143,4 +156,27 @@ module.exports = (db) => {
   });
 
   return app;
+};
+
+const paginate = function(data, pageNo=1, size=10) {
+  const totalPages = Math.ceil(data.length / size);
+
+  // ensure current page isn't out of range
+  if (pageNo > totalPages) {
+    pageNo = totalPages;
+  }
+
+  // calculate start and end item indexes
+  const startIndex = (pageNo - 1) * size;
+  const endIndex = Math.min(startIndex + size, data.length);
+  logger.info(`page: ${pageNo} size: ${size} \
+  startIndex: ${startIndex} endIndex: ${endIndex} \
+  totalPages: ${totalPages} totalItems: ${data.length}`);
+  return {
+    totalItems: data.length,
+    totalPages: totalPages,
+    page: Number(pageNo),
+    size: Math.min(size, data.length),
+    data: data.slice(startIndex, endIndex),
+  };
 };
