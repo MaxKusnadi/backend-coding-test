@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "npm run lint && nyc mocha tests",
+    "test": "npm run lint && nyc mocha --recursive tests --retries 5",
     "start": "node index.js",
     "lint": "eslint ./src ./tests --fix",
     "tsc": "tsc"

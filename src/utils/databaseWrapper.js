@@ -75,7 +75,7 @@ const rides = (db) => {
    * @return {Promise<any>} - all rows from ride table
    */
   const getAllRides = async () => {
-    logger.info('Getting all rides');
+    logger.info('Getting all rides from database');
     return await runDBAllAsync(db, constant.DB_SCRIPTS.getAllRides());
   };
 
@@ -86,7 +86,7 @@ const rides = (db) => {
    * @return {Promise<any>} - all rows that match the id
    */
   const getRideById = async (id) => {
-    logger.info(`Getting a ride by id: ${id}`);
+    logger.info(`Getting a ride by id: ${id} from database`);
     return await runDBAllAsync(db, constant.DB_SCRIPTS.getRideById(id));
   };
 
@@ -96,7 +96,7 @@ const rides = (db) => {
    * @return {Promise<any>} - the ID of the ride that is just created
    */
   const createNewRide = async (values) => {
-    logger.info('Creating a new ride');
+    logger.info('Creating a new ride from database');
     return await runDBRunAsync(db, values, constant.DB_SCRIPTS.createRide());
   };
   return {

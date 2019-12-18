@@ -28,11 +28,7 @@ const prepareData = async function() {
             'endLat, endLong, riderName, driverName, driverVehicle) VALUES' +
             '(?, ?, ?, ?, ?, ?, ?)', values, function(err) {
       if (err) {
-        logger.error(err);
-        return res.send({
-          error_code: 'SERVER_ERROR',
-          message: 'Unknown error',
-        });
+        return err;
       }
     });
   });
