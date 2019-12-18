@@ -2,6 +2,11 @@
 
 const winston = require('winston');
 
+/**
+ * Creating logger using Winston
+ *
+ * @type {winston.Logger}
+ */
 module.exports = winston.createLogger({
   level: 'info',
   format: winston.format.combine(

@@ -176,7 +176,6 @@ definitions:
         description: "The name of the rider"
   GetRidesResponse:
     type: "object"
-      data: data.slice(startIndex, endIndex),
     properties:
       totalItems:
         type: "integer"

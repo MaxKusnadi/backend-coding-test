@@ -1,14 +1,14 @@
 'use strict';
 
 const request = require('supertest');
-const assert = require('assert');
+const assert = require('chai').assert;
 const _ = require('lodash');
 
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 
 const app = require('../src/app')(db);
-const buildSchemas = require('../src/schemas');
+const buildSchemas = require('../src/utils/databaseWrapper').buildSchemas;
 
 const prepareData = async function() {
   const data = {
@@ -28,11 +28,7 @@ const prepareData = async function() {
             'endLat, endLong, riderName, driverName, driverVehicle) VALUES' +
             '(?, ?, ?, ?, ?, ?, ?)', values, function(err) {
       if (err) {
-        logger.error(err);
-        return res.send({
-          error_code: 'SERVER_ERROR',
-          message: 'Unknown error',
-        });
+        return err;
       }
     });
   });
@@ -45,9 +41,7 @@ describe('API tests', () => {
       if (err) {
         return done(err);
       }
-
       buildSchemas(db);
-
       done();
     });
   });
@@ -67,7 +61,7 @@ describe('API tests', () => {
           .get('/rides')
           .expect(200)
           .expect((res) => {
-            assert(res.body.error_code === 'RIDES_NOT_FOUND_ERROR');
+            assert.strictEqual(res.body.error_code, 'RIDES_NOT_FOUND_ERROR');
           })
           .end(done);
     });
@@ -91,7 +85,8 @@ describe('API tests', () => {
                 .get(`/rides`)
                 .expect(200)
                 .expect((getResponse) => {
-                  assert(getResponse.body.data[0].rideID === res.body.rideID);
+                  assert.strictEqual(getResponse.body.data[0].rideID,
+                      res.body.rideID);
                 })
                 .end(done);
           });
@@ -108,7 +103,7 @@ describe('API tests', () => {
           })
           .expect(200)
           .expect((res) => {
-            assert(res.body.error_code === 'VALIDATION_ERROR');
+            assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
           .end(done);
     });
@@ -122,7 +117,7 @@ describe('API tests', () => {
           })
           .expect(200)
           .expect((res) => {
-            assert(res.body.error_code === 'VALIDATION_ERROR');
+            assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
           .end(done);
     });
@@ -133,9 +128,9 @@ describe('API tests', () => {
           .get('/rides')
           .expect(200)
           .expect((res) => {
-            assert(res.body.page === 1);
-            assert(res.body.size === 10);
-            assert(res.body.data.length <= res.body.size);
+            assert.strictEqual(res.body.page, 1);
+            assert.strictEqual(res.body.size, 10);
+            assert.isTrue(res.body.data.length <= res.body.size);
           })
           .end(done);
     });
@@ -150,9 +145,9 @@ describe('API tests', () => {
             'page': 99,
           })
           .expect((res) => {
-            assert(res.body.page === res.body.totalPages);
-            assert(res.body.size === 10);
-            assert(res.body.data.length <= res.body.size);
+            assert.strictEqual(res.body.page, res.body.totalPages);
+            assert.strictEqual(res.body.size, 10);
+            assert.isTrue(res.body.data.length <= res.body.size);
           })
           .end(done);
     });
@@ -167,8 +162,8 @@ describe('API tests', () => {
             'page': 1,
           })
           .expect((res) => {
-            assert(res.body.page === res.body.totalPages);
-            assert(res.body.size === res.body.data.length);
+            assert.strictEqual(res.body.page, res.body.totalPages);
+            assert.strictEqual(res.body.size, res.body.data.length);
           })
           .end(done);
     });
@@ -180,7 +175,7 @@ describe('API tests', () => {
           .get('/rides/99')
           .expect(200)
           .expect((res) => {
-            assert(res.body.error_code === 'RIDES_NOT_FOUND_ERROR');
+            assert.strictEqual(res.body.error_code, 'RIDES_NOT_FOUND_ERROR');
           })
           .end(done);
     });
@@ -205,7 +200,7 @@ describe('API tests', () => {
                 .expect(200)
                 .expect((getResponse) => {
                   // console.log(getResponse);
-                  assert(getResponse.body.rideID === res.body.rideID);
+                  assert.strictEqual(getResponse.body.rideID, res.body.rideID);
                 })
                 .end(done);
           });
@@ -228,7 +223,7 @@ describe('API tests', () => {
           .set('Content-Type', 'application/json')
           .expect(200)
           .expect((res) => {
-            assert(res.body.rideID != null);
+            assert.isNotNull(res.body.rideID);
           })
           .end(done);
     });
@@ -247,7 +242,7 @@ describe('API tests', () => {
           })
           .set('Content-Type', 'application/json')
           .expect((res) => {
-            assert(res.body.error_code === 'VALIDATION_ERROR');
+            assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
           .end(done);
     });
@@ -266,7 +261,7 @@ describe('API tests', () => {
           })
           .set('Content-Type', 'application/json')
           .expect((res) => {
-            assert(res.body.error_code === 'VALIDATION_ERROR');
+            assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
           .end(done);
     });
@@ -285,7 +280,7 @@ describe('API tests', () => {
           })
           .set('Content-Type', 'application/json')
           .expect((res) => {
-            assert(res.body.error_code === 'VALIDATION_ERROR');
+            assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
           .end(done);
     });
@@ -304,7 +299,7 @@ describe('API tests', () => {
           })
           .set('Content-Type', 'application/json')
           .expect((res) => {
-            assert(res.body.error_code === 'VALIDATION_ERROR');
+            assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
           .end(done);
     });
@@ -323,7 +318,7 @@ describe('API tests', () => {
           })
           .set('Content-Type', 'application/json')
           .expect((res) => {
-            assert(res.body.error_code === 'VALIDATION_ERROR');
+            assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
           .end(done);
     });

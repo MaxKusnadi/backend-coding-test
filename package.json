@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "npm run lint && nyc mocha tests",
+    "test": "npm run lint && nyc mocha --recursive tests --retries 5",
     "start": "node index.js",
     "lint": "eslint ./src ./tests --fix",
     "tsc": "tsc"
@@ -38,6 +38,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.9.0",
     "@typescript-eslint/parser": "^2.9.0",
+    "chai": "^4.2.0",
     "eslint": "^6.7.1",
     "eslint-config-google": "^0.14.0",
     "husky": "^3.1.0",
