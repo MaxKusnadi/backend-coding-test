@@ -5,13 +5,14 @@ const app = express();
 
 const logger = require('./utils/logger');
 const databaseWrapper = require('./utils/databaseWrapper');
+const healthComponent = require('./components/health');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 module.exports = (db) => {
   const riderDatabase = databaseWrapper.rides(db);
-  app.get('/health', (req, res) => res.send('Healthy'));
+  app.get('/health', healthComponent.get);
 
   app.post('/rides', jsonParser, (req, res) => {
     logger.info('[POST] /rides is hit');
