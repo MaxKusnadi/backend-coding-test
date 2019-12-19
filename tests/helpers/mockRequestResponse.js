@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Create a mock response object
+ * @return {Object} mock response
+ */
 const mockResponse = () => {
   const res = {};
   res.status = (status) =>{
@@ -13,8 +17,17 @@ const mockResponse = () => {
   return res;
 };
 
-const mockRequest= (body) => ({
+/**
+ * Create a mock request with a given input
+ * @param {Object} body
+ * @param {Object} query
+ * @param {Object} params
+ * @return {{body: *, query: *, params: *}}
+ */
+const mockRequest= (body, query, params) => ({
   body,
+  query,
+  params,
 });
 
 module.exports = {
