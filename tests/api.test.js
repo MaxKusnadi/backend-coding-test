@@ -59,14 +59,14 @@ describe('API tests', () => {
     it('should return not found', (done) => {
       request(app)
           .get('/rides')
-          .expect(200)
+          .expect(404)
           .expect((res) => {
-            assert.strictEqual(res.body.error_code, 'RIDES_NOT_FOUND_ERROR');
+            assert.strictEqual(res.body.error_code, 'RESOURCE_NOT_FOUND');
           })
           .end(done);
     });
 
-    it('should return fine', (done) => {
+    it('should return all rides', (done) => {
       request(app)
           .post('/rides')
           .send({
@@ -79,7 +79,7 @@ describe('API tests', () => {
             'driver_vehicle': 'Car',
           })
           .set('Content-Type', 'application/json')
-          .expect(200)
+          .expect(201)
           .then((res) => {
             request(app)
                 .get(`/rides`)
@@ -101,7 +101,7 @@ describe('API tests', () => {
             'page': 'abc',
             'size': 'abc',
           })
-          .expect(200)
+          .expect(400)
           .expect((res) => {
             assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
@@ -115,7 +115,7 @@ describe('API tests', () => {
             'page': 0,
             'size': -1,
           })
-          .expect(200)
+          .expect(400)
           .expect((res) => {
             assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
@@ -173,14 +173,14 @@ describe('API tests', () => {
     it('should return not found', (done) => {
       request(app)
           .get('/rides/99')
-          .expect(200)
+          .expect(404)
           .expect((res) => {
-            assert.strictEqual(res.body.error_code, 'RIDES_NOT_FOUND_ERROR');
+            assert.strictEqual(res.body.error_code, 'RESOURCE_NOT_FOUND');
           })
           .end(done);
     });
 
-    it('should return fine', (done) => {
+    it('should return ride', (done) => {
       request(app)
           .post('/rides')
           .send({
@@ -193,7 +193,7 @@ describe('API tests', () => {
             'driver_vehicle': 'Car',
           })
           .set('Content-Type', 'application/json')
-          .expect(200)
+          .expect(201)
           .then((res) => {
             request(app)
                 .get(`/rides/${res.body.rideID}`)
@@ -221,7 +221,7 @@ describe('API tests', () => {
             'driver_vehicle': 'Car',
           })
           .set('Content-Type', 'application/json')
-          .expect(200)
+          .expect(201)
           .expect((res) => {
             assert.isNotNull(res.body.rideID);
           })
@@ -241,6 +241,7 @@ describe('API tests', () => {
             'driver_vehicle': 'Car',
           })
           .set('Content-Type', 'application/json')
+          .expect(400)
           .expect((res) => {
             assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
@@ -260,6 +261,7 @@ describe('API tests', () => {
             'driver_vehicle': 'Car',
           })
           .set('Content-Type', 'application/json')
+          .expect(400)
           .expect((res) => {
             assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
@@ -274,11 +276,12 @@ describe('API tests', () => {
             'start_lat': 70,
             'end_long': 110,
             'end_lat': 75,
-            'rider_name': 123,
+            'rider_name': '',
             'driver_name': 'John',
             'driver_vehicle': 'Car',
           })
           .set('Content-Type', 'application/json')
+          .expect(400)
           .expect((res) => {
             assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
@@ -294,17 +297,18 @@ describe('API tests', () => {
             'end_long': 110,
             'end_lat': 75,
             'rider_name': 'Max',
-            'driver_name': 123,
+            'driver_name': '',
             'driver_vehicle': 'Car',
           })
           .set('Content-Type', 'application/json')
+          .expect(400)
           .expect((res) => {
             assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
           .end(done);
     });
 
-    it('should fail with invalid driver\'s name', (done) => {
+    it('should fail with invalid driver\'s vehicle', (done) => {
       request(app)
           .post('/rides')
           .send({
@@ -314,9 +318,10 @@ describe('API tests', () => {
             'end_lat': 75,
             'rider_name': 'Max',
             'driver_name': 'John',
-            'driver_vehicle': 123,
+            'driver_vehicle': '',
           })
           .set('Content-Type', 'application/json')
+          .expect(400)
           .expect((res) => {
             assert.strictEqual(res.body.error_code, 'VALIDATION_ERROR');
           })
