@@ -327,5 +327,26 @@ describe('API tests', () => {
           })
           .end(done);
     });
+
+    it('should not delete the DB', (done) => {
+      request(app)
+          .post('/rides')
+          .send({
+            'start_long': 100,
+            'start_lat': 70,
+            'end_long': 110,
+            'end_lat': 75,
+            'rider_name': 'DROP TABLE Rides',
+            'driver_name': 'SaniTize this?><:)(*)',
+            'driver_vehicle': 'Car',
+          })
+          .set('Content-Type', 'application/json')
+          .expect(201)
+          .expect((res) => {
+            assert.isNotNull(res.body.rideID);
+            assert.strictEqual(res.body.driverName, 'SaniTize this');
+          })
+          .end(done);
+    });
   });
 });

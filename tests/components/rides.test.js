@@ -24,7 +24,7 @@ const insertRides = async () => {
     data.end_lat, data.end_long, data.rider_name,
     data.driver_name, data.driver_vehicle];
 
-  return db.run('INSERT INTO Rides(startLat, startLong,' +
+  db.run('INSERT INTO Rides(startLat, startLong,' +
     'endLat, endLong, riderName, driverName, driverVehicle) VALUES' +
     '(?, ?, ?, ?, ?, ?, ?)', values, function(err) {
     if (err) {

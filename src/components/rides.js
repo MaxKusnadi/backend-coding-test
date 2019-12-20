@@ -149,9 +149,10 @@ const rideController = (db) => {
     const startLongitude = Number(req.body.start_long);
     const endLatitude = Number(req.body.end_lat);
     const endLongitude = Number(req.body.end_long);
-    const riderName = String(req.body.rider_name);
-    const driverName = String(req.body.driver_name);
-    const driverVehicle = String(req.body.driver_vehicle);
+    const riderName = String(req.body.rider_name).replace(/[^\w\s]/gi, '');
+    const driverName = String(req.body.driver_name).replace(/[^\w\s]/gi, '');
+    const driverVehicle =
+      String(req.body.driver_vehicle).replace(/[^\w\s]/gi, '');
 
     // Business logic
     const values = [startLatitude, startLongitude,
