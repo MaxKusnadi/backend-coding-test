@@ -63,52 +63,12 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - name: "start_long"
-          in: "body"
-          description: "The longitude of the initial location of the ride. The value must be in between -180 and 180 exclusive"
+        - in: "body"
+          name: "body"
+          description: "Rides information"
           required: true
-          type: "integer"
-          format: "int64"
-
-        - name: "start_lat"
-          in: "body"
-          description: "The latitude of the initial location of the ride. The value must be in between -90 and 90 exclusive"
-          required: true
-          type: "integer"
-          format: "int64"
-
-        - name: "end_long"
-          in: "body"
-          description: "The longitude of the end location of the ride. The value must be in between -180 and 180 exclusive"
-          required: true
-          type: "integer"
-          format: "int64"
-
-        - name: "end_lat"
-          in: "body"
-          description: "The latitude of the end location of the ride. The value must be in between -90 and 90 exclusive"
-          required: true
-          type: "integer"
-          format: "int64"
-
-        - name: "rider_name"
-          in: "body"
-          description: "The name of the rider"
-          required: true
-          type: "string"
-
-        - name: "driver_name"
-          in: "body"
-          description: "The name of the driver"
-          required: true
-          type: "string"
-
-        - name: "driver_vehicle"
-          in: "body"
-          description: "The plate number of the driver"
-          required: true
-          type: "string"
-
+          schema:
+            $ref: "#/definitions/Rides"
       responses:
         201:
           description: "Rides creation is successful"

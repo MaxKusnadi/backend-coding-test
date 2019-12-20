@@ -6,6 +6,9 @@ const db = new sqlite3.Database(':memory:');
 const databaseWrapper = require('../../src/utils/databaseWrapper');
 const models = require('../../src/models');
 
+/**
+ * Testing declarative promise-ful db functions
+ */
 describe('databaseWrapper test', () => {
   before((done) => {
     db.serialize((err) => {
