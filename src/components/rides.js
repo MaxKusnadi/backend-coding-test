@@ -1,5 +1,6 @@
 'use strict';
 
+const shortid = require('shortid');
 const databaseWrapper = require('../utils/databaseWrapper');
 const errorGenerator = require('../utils/errorGenerator');
 const requestValidator = require('../utils/requestValidator');
@@ -104,7 +105,7 @@ const rideController = (db) => {
     }
 
     // Sanitizing request
-    const id = Number(req.params.id);
+    const id = String(req.params.id).replace(/[^\w\s]/gi, '');
 
     // Business logic
     try {
@@ -153,14 +154,15 @@ const rideController = (db) => {
     const driverName = String(req.body.driver_name).replace(/[^\w\s]/gi, '');
     const driverVehicle =
       String(req.body.driver_vehicle).replace(/[^\w\s]/gi, '');
+    const rideID = shortid.generate();
 
     // Business logic
     const values = [startLatitude, startLongitude,
       endLatitude, endLongitude, riderName,
-      driverName, driverVehicle];
+      driverName, driverVehicle, rideID];
     try {
       const riderId = await ridesDatabase.createNewRide(values);
-      const result = await ridesDatabase.getRideById(riderId);
+      const result = await ridesDatabase.getRideByRowId(riderId);
       return res
           .status(constant.HTTP_CODE.CREATED)
           .send(result[0]);

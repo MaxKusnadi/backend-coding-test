@@ -29,8 +29,8 @@ const isGetAllRidesRequestInvalid = (req) => {
 const isGetRideByIdRequestInvalid = (req) => {
   const id = req.params.id;
   return {
-    result: !Number.isInteger(Number(id)) || Number(id) <= 0,
-    message: 'rideID must be integer > 0',
+    result: id.length <= 0,
+    message: 'rideID must be a non empty alphanumeric',
   };
 };
 
