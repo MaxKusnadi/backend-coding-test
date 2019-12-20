@@ -35,10 +35,21 @@ const rides = (db) => {
    * Wrapper to run db.all function in promise style
    *
    * @param {sqlite3.Database} db
+   * @param {Object} values
    * @param {string} script of the db operation
    * @return {Promise<any>} result of the db operation
    */
-  const runDBAllAsync = (db, script) => {
+  const runDBAllAsync = (db, values, script) => {
+    if (values) {
+      return new Promise((resolve, reject) => {
+        db.all(script, values, (err, rows) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(rows);
+        });
+      });
+    }
     return new Promise((resolve, reject) => {
       db.all(script, (err, rows) => {
         if (err) {
@@ -76,7 +87,7 @@ const rides = (db) => {
    */
   const getAllRides = async () => {
     logger.info('Getting all rides from database');
-    return await runDBAllAsync(db, constant.DB_SCRIPTS.getAllRides());
+    return await runDBAllAsync(db, null, constant.DB_SCRIPTS.getAllRides());
   };
 
   /**
@@ -87,7 +98,7 @@ const rides = (db) => {
    */
   const getRideById = async (id) => {
     logger.info(`Getting a ride by id: ${id} from database`);
-    return await runDBAllAsync(db, constant.DB_SCRIPTS.getRideById(id));
+    return await runDBAllAsync(db, id, constant.DB_SCRIPTS.getRideById());
   };
 
   /**
