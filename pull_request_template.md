@@ -6,5 +6,5 @@
 - [ ] I have proper PR Description
 - [ ] I have added UT for the change
 - [ ] I have reviewer for the change
-- [ ] I have >80% coverage and post the result here
+- [ ] I have >80% coverage
 - [ ] I have added documentation for my changes
