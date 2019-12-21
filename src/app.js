@@ -5,9 +5,8 @@ const express = require('express');
 const healthComponent = require('./components/health');
 const ridesController = require('./components/rides');
 
-const app = express();
-
 module.exports = (db) => {
+  const app = express();
   const ridesComponent = ridesController(db);
 
   app.get('/health', healthComponent.get);

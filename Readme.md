@@ -81,8 +81,8 @@ Please implement the following refactors of the code:
 
 Please implement the following security controls for your system:
 
-1. Ensure the system is not vulnerable to [SQL injection](https://www.owasp.org/index.php/SQL_Injection)
-2. **[BONUS]** Implement an additional security improvement of your choice
+1. **[DONE]** Ensure the system is not vulnerable to [SQL injection](https://www.owasp.org/index.php/SQL_Injection)
+2. **[DONE]** **[BONUS]** Implement an additional security improvement of your choice
 
 #### Success Criteria
 
@@ -92,7 +92,7 @@ Please implement the following security controls for your system:
 
 ### Load Testing
 
-Please implement load testing to ensure your service can handle a high amount of traffic
+**[DONE]** Please implement load testing to ensure your service can handle a high amount of traffic
 
 #### Success Criteria
 
