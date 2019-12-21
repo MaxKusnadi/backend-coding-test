@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  'Rides': `rideID INTEGER PRIMARY KEY AUTOINCREMENT,
+  'Rides': `rideID VARCHAR PRIMARY KEY,
         startLat DECIMAL NOT NULL,
         startLong DECIMAL NOT NULL,
         endLat DECIMAL NOT NULL,

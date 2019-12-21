@@ -27,8 +27,9 @@ const buildSchemas = (db) => {
  * Class that hosts functions to do ride operations
  *
  * @param {sqlite3.Database} db
- * @return {{createNewRide: (function(*=)),
- * getAllRides: (function()), getRideById: (function(*=))}}
+ * @return {{createNewRide: (function(Array): any),
+ * getAllRides: (function(): any), getRideById: (function(String): any),
+ * getRideByRowId: (function(Number): any)}}
  */
 const rides = (db) => {
   /**
@@ -93,12 +94,23 @@ const rides = (db) => {
   /**
    *  Getting ride by ID
    *
-   * @param {number} id of the ride
+   * @param {String} id of the ride
    * @return {Promise<any>} - all rows that match the id
    */
   const getRideById = async (id) => {
     logger.info(`Getting a ride by id: ${id} from database`);
     return await runDBAllAsync(db, id, constant.DB_SCRIPTS.getRideById());
+  };
+
+  /**
+   * Getting ride by row ID
+   *
+   * @param {Number} id - row id of the ride
+   * @return {Promise<any>} - all rows that match the id
+   */
+  const getRideByRowId = async (id) => {
+    logger.info(`Getting a ride by rowid: ${id} from database`);
+    return await runDBAllAsync(db, id, constant.DB_SCRIPTS.getRideByRowId());
   };
 
   /**
@@ -114,6 +126,7 @@ const rides = (db) => {
     createNewRide,
     getAllRides,
     getRideById,
+    getRideByRowId,
   };
 };
 

@@ -48,19 +48,9 @@ describe('requestValidator test', () => {
     assert.isFalse(result.result);
   });
 
-  it('tests negative id GET /rides/{id} request', () => {
+  it('tests invalid id GET /rides/{id} request', () => {
     const params = {
-      id: -1,
-    };
-    const req = mockRequest(null, null, params);
-    const result = requestValidator.isGetRideByIdRequestInvalid(req);
-    assert.isNotNull(result);
-    assert.isTrue(result.result);
-  });
-
-  it('tests not number id GET /rides/{id} request', () => {
-    const params = {
-      id: 'abc',
+      id: '',
     };
     const req = mockRequest(null, null, params);
     const result = requestValidator.isGetRideByIdRequestInvalid(req);

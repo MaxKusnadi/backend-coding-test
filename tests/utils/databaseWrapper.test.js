@@ -1,5 +1,6 @@
 'use strict';
 
+const shortid = require('shortid');
 const assert = require('chai').assert;
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
@@ -38,11 +39,14 @@ describe('databaseWrapper test', () => {
 
   it('should get ride by id', async () => {
     const ridesWrapper = databaseWrapper.rides(db);
-    const values = [100, 70, 110, 75, 'Max', 'John', 'Car'];
-    const rideId = await ridesWrapper.createNewRide(values);
-    assert.isNumber(rideId);
+    const rideId = shortid.generate();
+    const values = [100, 70, 110, 75, 'Max', 'John', 'Car', rideId];
+    const rowId = await ridesWrapper.createNewRide(values);
+    assert.isNumber(rowId);
+    const rides = await ridesWrapper.getRideByRowId(rowId);
+    assert.isNotEmpty(rides);
 
-    const rideRows = await ridesWrapper.getRideById(rideId);
+    const rideRows = await ridesWrapper.getRideById(rides[0].rideID);
     assert.lengthOf(rideRows, 1);
     assert.strictEqual(rideRows[0].rideID, rideId);
   });

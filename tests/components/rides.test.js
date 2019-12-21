@@ -11,8 +11,8 @@ const mockRequest = require('../helpers/mockRequestResponse').mockRequest;
 const mockResponse = require('../helpers/mockRequestResponse').mockResponse;
 
 const insertRides = async () => {
-  const data = {
-    'start_long': 100,
+  const body = {
+    'start_long': 115,
     'start_lat': 70,
     'end_long': 110,
     'end_lat': 75,
@@ -20,17 +20,10 @@ const insertRides = async () => {
     'driver_name': 'John',
     'driver_vehicle': 'Car',
   };
-  const values = [data.start_lat, data.start_long,
-    data.end_lat, data.end_long, data.rider_name,
-    data.driver_name, data.driver_vehicle];
-
-  db.run('INSERT INTO Rides(startLat, startLong,' +
-    'endLat, endLong, riderName, driverName, driverVehicle) VALUES' +
-    '(?, ?, ?, ?, ?, ?, ?)', values, function(err) {
-    if (err) {
-      return err;
-    }
-  });
+  const req = mockRequest(body, null, null);
+  const res = mockResponse();
+  const ridesComponent = ridesController(db);
+  return await ridesComponent.postRides(req, res);
 };
 
 describe('ridesController test', () => {
@@ -99,7 +92,7 @@ describe('ridesController test', () => {
 
     it('should return validation error', async () => {
       const params = {
-        id: -10,
+        id: '',
       };
       const req = mockRequest(null, null, params);
       const res = mockResponse();
@@ -114,8 +107,9 @@ describe('ridesController test', () => {
     it('should return all rides', async () => {
       const res = mockResponse();
       const ridesComponent = ridesController(db);
+      const addedRides = await insertRides();
       const params = {
-        id: 1,
+        id: addedRides.send.rideID,
       };
       const req = mockRequest(null, null, params);
       const response = await ridesComponent.getRideById(req, res);
